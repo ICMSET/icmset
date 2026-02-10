@@ -1,0 +1,609 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ICMSET — Tracks</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --navy:#05293a;
+      --gold:#fac13c;
+      --black:#0b0b0b;
+      --muted:#6b7280;
+      --surface:#f4f6f8;
+      --white:#ffffff;
+      --blue:#0c6ef6;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Poppins",system-ui,-apple-system,"Segoe UI",Roboto,Arial;
+      color:var(--black);
+      background:#fff;
+      -webkit-font-smoothing:antialiased;
+    }
+
+    /* TOP LINE */
+    .topbar{height:6px;background:#3b2720}
+    
+     /* HEADER */
+    header{
+      position:sticky;top:0;z-index:1000;background:var(--white);
+      box-shadow:0 1px 0 rgba(0,0,0,0.04);
+    }
+    .nav-wrap{
+      max-width:1200px;margin:0 auto;padding:12px 18px;
+      display:flex;align-items:center;gap:20px;justify-content:space-between;
+    }
+    .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--navy)}
+    .badge{background:var(--navy);color:var(--white);padding:6px 10px;border-radius:6px;font-weight:700;font-size:13px}
+    .tag{font-weight:600;color:var(--muted);font-size:14px}
+
+    nav{display:flex;align-items:center;gap:12px}
+    .menu{display:flex;gap:6px;list-style:none;margin:0;padding:0;align-items:center}
+    .menu li{position:relative}
+    .menu a{
+      display:inline-flex;align-items:center;gap:8px;padding:8px 12px;text-decoration:none;
+      color:var(--muted);font-weight:600;font-size:14px;border-radius:6px;white-space:nowrap;
+    }
+    .menu a:hover,.menu .active> a{ color:var(--navy);background:rgba(5,41,58,0.04) }
+    /* Dropdown */
+    .dropdown{
+      position:absolute;top:calc(100% + 10px);left:0;min-width:220px;background:var(--white);
+      box-shadow:0 10px 24px rgba(2,6,23,0.12);border-radius:8px;padding:8px 0;display:none;
+    }
+    .menu li.open>.dropdown{display:block}
+    .dropdown .section-title{padding:8px 14px;font-weight:700;font-size:12px;color:var(--navy);text-transform:uppercase}
+    .dropdown a{display:block;padding:8px 14px;color:#333;font-size:13px}
+    .dropdown a:hover{background:var(--surface)}
+
+    .mobile-toggle{display:none;background:transparent;border:0;padding:6px;cursor:pointer}
+    .mobile-toggle svg{width:22px;height:22px;color:var(--navy)}
+
+    /* ANNOUNCEMENT */
+    .announcement{
+      background:#f6f7f8;border-top:1px solid rgba(2,6,23,0.02);border-bottom:1px solid rgba(2,6,23,0.02);
+      padding:28px 22px;text-align:center;position:relative;overflow:visible;
+    }
+    .announcement .text{max-width:1100px;margin:0 auto;color:#333;font-size:15px;line-height:1.5}
+    .announcement .highlight{display:block;margin-top:14px;font-weight:800;color:#d42020;font-size:20px;letter-spacing:0.6px}
+
+    /* decorative left bubbles */
+    .decor-left{position:absolute;left:0;top:40%;transform:translateY(-50%);pointer-events:none}
+    .bubble{width:110px;height:110px;border-radius:50%;position:relative;margin-bottom:10px;filter:blur(1px)}
+    .bubble.purple{background:linear-gradient(45deg, rgba(155,81,224,0.18), rgba(234,88,153,0.16));width:140px;height:140px;margin-left:30px;opacity:0.95}
+    .bubble.blue{background:linear-gradient(45deg, rgba(60,130,240,0.14), rgba(34,197,94,0.06));width:90px;height:90px;margin-left:-10px;opacity:0.9}
+
+    /* MAIN CONTENT */
+    main{padding:56px 22px 120px;max-width:1200px;margin:0 auto;position:relative}
+    .section-title{text-align:center;color:#0c6ef6;font-size:36px;font-weight:700;margin:10px 0 38px;letter-spacing:1px}
+
+    /* TRACKS GRID */
+    .tracks-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:36px;align-items:start}
+    .track{background:#fff;border-radius:8px;overflow:hidden;box-shadow:0 8px 28px rgba(2,6,23,0.06);position:relative;min-height:340px;transition:transform .32s ease, box-shadow .32s ease}
+    .track:hover{transform:translateY(-6px);box-shadow:0 20px 48px rgba(2,6,23,0.12)}
+
+    .track .img{width:100%;height:100%;min-height:340px;background-size:cover;background-position:center;display:flex;align-items:center;justify-content:center;position:relative;transition:transform .6s cubic-bezier(.2,.9,.3,1)}
+    /* zoom image slightly on hover */
+    .track:hover .img{transform:scale(1.04)}
+
+    /* overlay: subtle gradient + title reveal */
+    .track .overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:linear-gradient(180deg, rgba(0,0,0,0.18) 0%, rgba(0,0,0,0.38) 100%);opacity:1;transition:background .3s ease}
+    .track .title{font-size:54px;font-weight:700;color:rgba(255,255,255,0.98);text-shadow:0 6px 18px rgba(0,0,0,0.45);letter-spacing:1.4px;transform:translateY(0);transition:transform .36s cubic-bezier(.2,.9,.3,1), opacity .36s}
+
+    /* On hover: make text pop slightly */
+    .track:hover .title{transform:translateY(-6px);opacity:1}
+
+    /* bottom decorative strip */
+    .track::after{content:"";position:absolute;bottom:-18px;left:20px;right:20px;height:12px;background:linear-gradient(90deg,#fff,#fff);border-radius:6px;box-shadow:0 10px 22px rgba(2,6,23,0.04);z-index:2}
+
+    /* small meta badge (optional) */
+    .track .badge{
+      position:absolute;top:16px;left:16px;background:rgba(0,0,0,0.62);color:#fff;padding:6px 10px;border-radius:6px;font-weight:700;font-size:13px;z-index:3;
+    }
+
+    /* Caption */
+.track-caption{
+  padding:18px;
+  text-align:center;
+  font-weight:600;
+  background:#fff;
+}
+
+.open-modal {
+  cursor: pointer;
+}
+
+/* ===== MODAL ===== */
+.track-modal{
+  position:fixed;
+  inset:0;
+  display:none;
+  z-index:2000;
+}
+
+.track-modal.show{display:block}
+
+.modal-backdrop{
+  position:absolute;
+  inset:0;
+  background:rgba(0,0,0,.6);
+}
+
+.modal-box{
+  position:relative;
+  max-width:920px;
+  margin:40px auto;
+  background:#fff;
+  border-radius:8px;
+  overflow:auto;
+  max-height:90vh;
+  animation:scaleIn .25s ease;
+}
+
+@keyframes scaleIn{
+  from{transform:scale(.95);opacity:0}
+  to{transform:scale(1);opacity:1}
+}
+
+.modal-close{
+  position:absolute;
+  top:14px;
+  right:18px;
+  font-size:28px;
+  border:none;
+  background:none;
+  cursor:pointer;
+  color:#fff;
+  z-index:3;
+}
+
+/* ===== MODAL HEADER ===== */
+.modal-header{
+  background:linear-gradient(135deg,var(--navy),var(--blue));
+  padding:32px;
+  color:#fff;
+}
+
+.modal-track{
+  display:inline-block;
+  background:rgba(255,255,255,.2);
+  padding:6px 14px;
+  border-radius:20px;
+  font-weight:700;
+  font-size:14px;
+}
+
+.modal-title{
+  margin:14px 0 0;
+  font-size:30px;
+  font-weight:800;
+}
+
+/* ===== MODAL BODY ===== */
+.modal-body{
+  display:grid;
+  grid-template-columns:1fr 1.4fr;
+  gap:32px;
+  padding:36px;
+}
+
+.modal-body img{
+  width:100%;
+  border-radius:6px;
+  box-shadow:0 14px 30px rgba(0,0,0,.18);
+}
+
+.modal-right h3{
+  margin-top:0;
+  font-size:20px;
+  color:black;
+}
+
+.modal-text{
+  font-size:15.5px;
+  line-height:1.7;
+  color:#444;
+}
+
+.modal-text ul{
+  padding-left:18px;
+}
+
+.modal-text li{
+  margin-bottom:6px;
+}
+
+/* Responsive */
+@media(max-width:820px){
+  .modal-body{
+    grid-template-columns:1fr;
+  }
+}
+    /* Responsive */
+    @media (max-width:900px){
+      .tracks-grid{grid-template-columns:1fr;gap:24px}
+      .track .img{height:300px;min-height:0}
+      .track .title{font-size:40px}
+      .decor-left{display:none}
+    }
+
+    /* Responsive */
+    @media (max-width:960px){
+      .grid{grid-template-columns:1fr; }
+      .req-wrap{margin-top:10px}
+      .centered img{max-width:150px}
+      .menu{display:none}        /* hide desktop menu on small screens; we'll use mobile toggle */
+      .mobile-toggle{display:inline-flex}
+    }
+    @media (max-width:480px){
+      .page{margin:18px auto;padding:0 14px}
+      .page-header h1{font-size:18px}
+      .section-title{font-size:20px}
+    }
+
+        /* Mobile slide-in menu (keeps same styles if you want later) */
+    .mobile-menu {
+      position:fixed;
+      top:62px;
+      right:0;
+      width:280px;
+      height:calc(100% - 62px);
+      background:var(--white);
+      box-shadow:-8px 20px 40px rgba(2,6,23,0.12);
+      transform:translateX(110%);
+      transition:transform .26s ease;
+      z-index:1200;
+      padding:18px;
+      overflow:auto;
+    }
+    .mobile-menu.open{ transform:translateX(0) }
+    .mobile-menu a{ display:block; padding:10px 12px; color:var(--muted); border-radius:6px; text-decoration:none; margin-bottom:6px; font-weight:600 }
+    .mobile-menu .dropdown { position:static; box-shadow:none; padding-left:8px; display:none }
+    .mobile-menu .open > .dropdown { display:block }
+
+    footer{border-top:1px solid rgba(2,6,23,0.04);padding:28px 22px;color:var(--muted);font-size:14px;background:#fff}
+    .footer-credit {
+  font-size: 14px;
+  color: var(--navy);
+  text-align: center;
+  font-weight: 500;
+}
+
+.footer-credit a {
+  color: var(--navy);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-credit a:hover {
+  text-decoration: underline;
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="topbar" aria-hidden="true"></div>
+
+  <header>
+    <div class="nav-wrap" role="banner">
+     <!-- <a class="brand" href="">
+        <span class="badge">ICMSET</span>
+      </a> -->
+
+      <br><br>
+
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="mobile-toggle" id="mobileToggle" aria-expanded="false" aria-label="Open menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"></path>
+          </svg>
+        </button>
+
+        <!-- Desktop menu (hidden on small screens) -->
+        <nav aria-label="Main navigation">
+          <ul class="menu" id="mainMenu" role="menubar" aria-hidden="false">
+            <li><a href="index.html" >Home</a></li>
+            <li><a href="paper.html" class="active">Call For Papers</a></li>
+            <li><a href="paper-submission.html" class="active">Paper Submission</a></li>
+            <li><a href="important date.html">Important Dates</a></li>
+
+            <li>
+              <a href="#" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Authors ▾</a>
+              <div class="dropdown" role="menu" aria-label="Call for papers submenu">
+                <a href="registation.html">Registration</a>
+                <a href="visa.html">VISA</a>
+              </div>
+            </li>
+
+            <li><a href="partons.html">Committees</a></li>
+            <li><a href="publication.html">Publication</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+    <div id="mobileMenu" class="mobile-menu" aria-hidden="true">
+    <a href="index.html">Home</a>
+
+    <a href="paper.html">Call For Papers</a>
+    <a href="paper-submission.html" aria-current="page">Paper Submission</a>
+    <a href="important date.html">Important Dates</a>
+
+    <div class="mobile-item">
+      <a href="registation.html" class="mobile-dropdown-toggle">Authors ▾</a>
+      <div class="dropdown">
+        <a href="registation.html">Registration</a>
+        <a href="visa.html">VISA</a>
+      </div>
+    </div>
+
+    <a href="partons.html">Committees</a>
+    <a href="publication.html">Publication</a>
+    <a href="contact.html">Contact</a>
+    
+  </div>
+
+
+  <!-- Announcement / Intro -->
+  <section class="announcement" aria-label="Announcement">
+    <div class="decor-left" aria-hidden="true">
+      <div class="bubble purple" style="opacity:0.55"></div>
+      <div class="bubble" style="background: linear-gradient(45deg, rgba(234,88,153,0.12), rgba(60,130,240,0.08));"></div>
+      <div class="bubble blue" style="opacity:0.9"></div>
+    </div>
+
+
+    <div style="font-size:25px; text-align: center; font-weight: 700;">International Conference on</div>
+    <div style="font-size:25px; text-align: center; font-weight: 700;">Modern Sustainable Engineering and Technology</div> 
+    <div style="font-size:25px; text-align: center; font-weight: 700;">ICMSET 2K26</div>
+    <div style="font-size:15px; text-align: center; font-weight: 700;">In Collaboration With </div>
+    <div style="font-size:25px; text-align: center; font-weight: 700;">King Mongkut's Institute of Technology Ladkrabang</div> 
+    <br> <br><br>
+
+    <div class="text" style="text-align: justify;">
+      <strong style="color:var(--navy);">ICMSET-2K26</strong> 
+      invites high-quality research contributions showcasing the latest advancements and future trends across sustainable 
+      engineering, advanced materials, renewable energy systems, intelligent mobility, mechatronics, automation, and digital 
+      technologies. The conference aims to provide a rich platform for researchers, academicians, industry professionals, and 
+      innovators to share insights, exchange ideas, and explore emerging developments that address global engineering challenges. 
+      This international conference is designed to support engineering professionals and scholars by offering opportunities to 
+      engage with cutting-edge research, network with experts, and gain exposure to modern technological trends shaping the future 
+      of engineering.      
+      <span class="highlight">“Best Paper Award will be presented for each technical session, along with a memento and certificate.”
+      </span>
+    </div>
+  </section>
+
+  <!-- TRACKS SECTION (4 tracks, hover animation included) -->
+<!-- ================= TRACKS SECTION ================= -->
+<main class="tracks-section" aria-label="Tracks">
+
+<h2 class="section-title">TRACKS</h2>
+
+  <div class="tracks-grid">
+
+    <article class="track">
+      <div class="img open-modal"
+        style="background-image:url('image/track 1.jpeg')"
+        data-track="Track 1"
+        data-title=" Sustainable Materials, Manufacturing & Design"
+        data-text="This track explores intelligent systems, cyber-physical networks and emerging technologies that drive innovation across domains."
+        data-list="<ul>
+          <li>Advanced composites, hybrid materials & nanomaterials (SDG 9 , SDG 12)</li>
+          <li>IoT & Cyber-Physical SystemsBio-based, biodegradable and green materials (SDG 12, SDG 13, SDG 15)</li>
+          <li>Additive manufacturing & 3D printing for sustainability (SDG 9, SDG 12)</li>
+          <li>Sustainable metal forming, machining & welding processes (SDG 9, SDG 12)</li>
+          <li>Waste-to-materials, recycling & circular economy strategies (SDG 11, SDG 12, SDG 13)</li>
+          <li>Sustainable product design, LCA (Life Cycle Assessment) & eco-design (SDG 9, SDG 12, SDG 13)</li>
+          <li>Quality engineering, lean systems & reliability engineering (SDG 8, SDG 9, SDG 12)</li>
+        </ul>">
+        <div class="overlay" style="color: #fff;font-size:30px;"><h3>Track 1</h3></div>
+      </div>
+  <div class="track-caption" style="color: #d42020;" >Sustainable Materials, Manufacturing & Design</div>
+    </article>
+
+    <article class="track">
+      <div class="img open-modal"
+        style="background-image:url('image/tarck 2.jpeg')"
+        data-track="Track 2"
+        data-title="Energy, Environment & Climate Technologies"
+        data-text="Focuses on renewable energy systems, sustainability, smart grids and environmental technologies."
+        data-list="<ul>
+          <li>Solar, wind, geothermal, bioenergy & ocean energy systems (SDG 7, SDG 13)</li>
+          <li>Energy storage: batteries, supercapacitors & hydrogen technologies (SDG 7, SDG 9, SDG 13)</li>
+          <li>Thermal systems, heat transfer, solar ponds, PCM & EAHE technologies (SDG 7, SDG 9, SDG 13)</li>
+          <li>Net-zero, low-carbon & clean combustion technologies(SDG 7, SDG 9, SDG 13)</li>
+          <li>Air pollution control, emission mitigation & sustainable HVAC (SDG 3, SDG 11, SDG 13)</li>
+          <li>Climate change modeling, environmental impact assessment (SDG 13, SDG 11)</li>
+          <li>Carbon capture, utilization & storage (CCUS) (SDG 9, SDG 12, SDG 13)</li>
+        </ul>">
+        <div class="overlay" style="color: #fff;font-size:30px;" ><h3>Track 2</h3></div>
+      </div>
+      <div class="track-caption" style="color: #d42020;">Energy, Environment & Climate Technologies</div>
+    </article>
+
+    <article class="track">
+      <div class="img open-modal"
+        style="background-image:url('image/tarck 3.jpeg')"
+        data-track="Track 3"
+        data-title="Automotive, Aerospace & Intelligent Mobility Systems"
+        data-text="This track covers advanced materials, sustainable engineering practices, and innovations in material science for engineering applications."
+        data-list="<ul>
+          <li>Electric, hybrid & fuel-cell vehicles; charging infrastructure (SDG 7, SDG 9, SDG 11, SDG 13)</li>
+          <li>Vehicle dynamics, NVH, safety systems & lightweight structures (SDG 3, SDG 9, SDG 11)</li>
+          <li>Sustainable fuels, IC engine advancements & emission control (SDG 7, SDG 9, SDG 13)</li>
+          <li>Autonomous and intelligent vehicle systems(SDG 9, SDG 11)</li>
+          <li>Aerospace structures, aerodynamics & propulsion (SDG 9, SDG 13)</li>
+          <li>UAVs, drones & autonomous flight systems (SDG 9, SDG 11, SDG 13)</li>
+          <li>Marine engineering & smart navigation technologies (SDG 9, SDG 14)</li>
+        </ul>">
+        <div class="overlay" style="color: #fff;font-size:30px;" ><h3>Track 3</h3></div>
+      </div>
+      <div class="track-caption" style="color: #d42020;">Automotive, Aerospace & Intelligent Mobility Systems</div>
+    </article>
+
+    <article class="track">
+      <div class="img open-modal"
+        style="background-image:url('image/track 4.jpeg')"
+        data-track="Track 4"
+        data-title=" Robotics, Sustainable Computing, AI & Digital Engineering"
+        data-text="Explores intelligent mobility solutions, mechatronics, automation, and digital technologies for modern engineering systems."
+        data-list="<ul>
+          <li>Industrial robotics, automation & cyber-physical systems (SDG 8, SDG 9)</li>
+          <li>Mechatronic system design, smart sensors & actuators(SDG 9)</li>
+          <li>PLC, SCADA, IIoT & predictive maintenance (SDG 9, SDG 12)</li>
+          <li>Machine vision, AI-driven inspection & digital twins (SDG 9, SDG 12)</li>
+          <li>Big data analytics, ML & computational simulation (FEM/CFD) (SDG 9, SDG 12)</li>
+          <li>Industry 4.0, smart manufacturing & digital transformation (SDG 8, SDG 9, SDG 12)</li>
+          <li>Cloud/edge computing, blockchain & engineering applications (SDG 9, SDG 12)</li>
+        </ul>">
+        <div class="overlay" style="color: #fff;font-size:30px;" ><h3>Track 4</h3></div>
+      </div>
+      <div class="track-caption" style="color: #d42020;" > AI, Robotics, Sustainable Computing & Digital Engineering</div>
+    </article>
+
+  </div>
+</main>
+
+<!-- ===== MODAL ===== -->
+<div class="track-modal" id="trackModal">
+  <div class="modal-backdrop"></div>
+
+  <div class="modal-box">
+    <button class="modal-close">&times;</button>
+
+    <div class="modal-header">
+      <span class="modal-track" id="modalTrack"></span>
+      <h2 class="modal-title" id="modalTitle"></h2>
+    </div>
+
+    <div class="modal-body">
+      <div>
+        <img id="modalImage">
+      </div>
+      <div class="modal-right">
+        <h3>Objective</h3>
+        <div class="modal-text" id="modalText"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <footer style="border-top:1px solid rgba(0,0,0,0.04);padding:18px 0;text-align:center;color:var(--muted);font-size:13px">
+    <div style="max-width:1200px;margin:0 auto;">
+      <strong style="color:var(--navy)">ICMSET 2026</strong> — Panimalar Engineering College &nbsp;•&nbsp; © 2026 All rights reserved
+    </div>
+
+    <div class="footer-credit">
+  <span>Design & Development by</span><br>
+  <a href="https://www.linkedin.com/in/manoj-kumar-s-a66954263/" target="_blank">
+    Manoj Kumar S
+  </a>
+  &nbsp;|&nbsp;
+  <a href="https://www.linkedin.com/in/mahesh-swaminathan-575473369/" target="_blank">
+    Mahesh S
+  </a>
+</div>
+
+  </footer>
+
+  <script>
+    // MOBILE MENU
+    const mobileToggle = document.getElementById('mobileToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    if (mobileToggle && mobileMenu) {
+      mobileToggle.addEventListener('click', () => {
+        const isOpen = mobileMenu.classList.toggle('open');
+        mobileMenu.setAttribute('aria-hidden', String(!isOpen));
+        mobileToggle.setAttribute('aria-expanded', String(isOpen));
+      });
+
+      // close mobile menu when user clicks outside
+      document.addEventListener('click', (e) => {
+        if (!mobileMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+          mobileMenu.classList.remove('open');
+          mobileMenu.setAttribute('aria-hidden', 'true');
+          mobileToggle.setAttribute('aria-expanded', 'false');
+        }
+      });
+    }
+
+    // Generic dropdown toggle: works for desktop & mobile (anchors with .dropdown-toggle inside .menu)
+    document.querySelectorAll('.dropdown-toggle').forEach(toggle => {
+      toggle.addEventListener('click', function (e) {
+        // Only intercept click on small screens or when user explicitly clicks (prevents breaking normal links)
+        e.preventDefault();
+        const parentLi = toggle.closest('li');
+        if (!parentLi) return;
+        parentLi.classList.toggle('open');
+        const expanded = parentLi.classList.contains('open');
+        toggle.setAttribute('aria-expanded', String(expanded));
+      });
+    });
+
+    // Mobile menu dropdowns
+    document.querySelectorAll('.mobile-dropdown-toggle').forEach(t => {
+      t.addEventListener('click', function (e) {
+        e.preventDefault();
+        const parent = t.parentElement;
+        parent.classList.toggle('open');
+      });
+    });
+
+    // Close any desktop dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      // keep dropdown open if click is inside a dropdown-toggle or dropdown
+      if (e.target.closest('.dropdown') || e.target.closest('.dropdown-toggle')) return;
+      document.querySelectorAll('.menu li.open').forEach(li => li.classList.remove('open'));
+      document.querySelectorAll('.menu .dropdown-toggle').forEach(a => a.setAttribute('aria-expanded', 'false'));
+    });
+
+    // Ensure menus reset on resize
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 960) {
+        // ensure mobile menu hidden
+        if (mobileMenu) {
+          mobileMenu.classList.remove('open');
+          mobileMenu.setAttribute('aria-hidden', 'true');
+          if (mobileToggle) mobileToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+  </script>
+
+<!-- ================= MODAL SCRIPT ================= -->
+<script>
+const modal = document.getElementById('trackModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalTrack = document.getElementById('modalTrack');
+const modalImage = document.getElementById('modalImage');
+const modalText = document.getElementById('modalText');
+
+document.querySelectorAll('.open-modal').forEach(card => {
+  card.addEventListener('click', () => {
+    modalTitle.textContent = card.dataset.title;
+    modalTrack.textContent = card.dataset.track;
+    modalImage.src = card.style.backgroundImage.replace('url("','').replace('")','');
+    modalText.innerHTML = `<p>${card.dataset.text}</p>${card.dataset.list || ''}`;
+    modal.classList.add('show');
+  });
+});
+
+document.querySelector('.modal-close').onclick = closeModal;
+document.querySelector('.modal-backdrop').onclick = closeModal;
+
+function closeModal(){
+  modal.classList.remove('show');
+}
+</script>
+
+</body>
+</html>
