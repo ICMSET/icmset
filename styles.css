@@ -86,7 +86,7 @@ nav a:hover{background:rgba(255,255,255,0.04)}
   background-color:var(--navy);color:var(--white);padding:72px 0 48px;position:relative;background-size:cover;background-position:center;background-repeat:no-repeat;border-bottom-left-radius:28px;border-bottom-right-radius:28px;overflow:hidden;
 }
 .hero::after{
-  content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(5, 41, 58, 0.72),rgba(5,41,58,0.36));pointer-events:none;
+  content:"";position:absolute;inset:0;background:linear-gradient(180deg);pointer-events:none;
 }
 .hero .container{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;gap:16px;max-width:1200px}
 .hero .date{font-size:0.92rem;color:rgba(255,255,255,0.95);font-weight:700}
@@ -806,5 +806,4 @@ footer{padding:18px;text-align:center;color:var(--muted);font-size:14px;backgrou
     font-size:16px;
   }
   
-
 }
