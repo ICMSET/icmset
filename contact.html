@@ -22,6 +22,7 @@
       color:var(--black);
       background:#fff;
       -webkit-font-smoothing:antialiased;
+      overflow-x:hidden;   /* ADD THIS */
     }
 
     /* TOP LINE */
@@ -144,6 +145,55 @@
     .mobile-menu a{ display:block; padding:10px 12px; color:var(--muted); border-radius:6px; text-decoration:none; margin-bottom:6px; font-weight:600 }
     .mobile-menu .dropdown { position:static; box-shadow:none; padding-left:8px; display:none }
     .mobile-menu .open > .dropdown { display:block }
+
+    /* ================= MOBILE FIX (PHONES) ================= */
+@media (max-width: 768px){
+
+  main{
+    padding:30px 14px 80px;
+  }
+
+  .page-title{
+    font-size:26px;
+  }
+
+  /* stack contact sections */
+  .contact-wrap{
+    grid-template-columns: 1fr;
+    gap:18px;
+  }
+
+  /* make card full width */
+  .contact-card{
+    width:100%;
+    padding:18px;
+  }
+
+  /* fix long address lines */
+  .address-line{
+    font-size:14px;
+    word-break:break-word;
+  }
+
+  /* map height for phone */
+  .map-wrap{
+    min-height:260px;
+  }
+
+  .map-wrap iframe{
+    min-height:260px;
+  }
+
+  /* header spacing */
+  .nav-wrap{
+    padding:10px 12px;
+  }
+
+  .badge{
+    font-size:12px;
+    padding:5px 8px;
+  }
+}
   </style>
 </head>
 <body>
@@ -257,7 +307,7 @@
         <iframe
             title="Panimalar Engineering College - Map"
             src="https://www.google.com/maps?q=Panimalar+Engineering+College,+Poonamallee&output=embed"
-            style="border:0;width:100%;height:100%;min-height:360px;"
+            style="border:0;width:100%;height:260px;"
             allowfullscreen=""
             loading="lazy"
             referrerpolicy="no-referrer-when-downgrade"></iframe>
